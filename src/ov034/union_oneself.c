@@ -380,7 +380,7 @@ static void UnionOneself_UpdateEntryActors(UnionSystem *unisys, RivalDataSave *r
             if (i == 0) {
                 if (UnionEff_IsFriendBeacon(wifiList, &entry->beacon) == TRUE) {
                     UnionEff_AddMark(effWork, actor, 0);
-                } else if (func_0200f770(rival, entry->beacon.trainerId) == TRUE) {
+                } else if (Misc_IsMetTrainer(rival, entry->beacon.trainerId) == TRUE) {
                     UnionEff_AddMark(effWork, actor, 1);
                 }
             }
@@ -549,7 +549,7 @@ void UnionOneself_UpdateMarks(UnionSystem *unisys, GameData *gameData, Field *fi
             if (actor != NULL) {
                 if (UnionEff_IsFriendBeacon(wifiList, &entry->beacon) == TRUE) {
                     UnionEff_AddMark(effWork, actor, 0);
-                } else if (func_0200f770(rival, entry->beacon.trainerId) == TRUE) {
+                } else if (Misc_IsMetTrainer(rival, entry->beacon.trainerId) == TRUE) {
                     UnionEff_AddMark(effWork, actor, 1);
                 }
             }
@@ -841,7 +841,7 @@ static BOOL UnionOneself_IsBattleActivity(u32 activity) {
 static PokeParty *UnionOneself_CreateBoxParty(UnionSystem *unisys) {
     BattleBoxSave *battleBox = getBattleBox(GameData_GetSaveControl(unisys->param->gameData));
 
-    if (func_0200c340(battleBox) == FALSE) {
+    if (BattleBoxSave_HasPkm(battleBox) == FALSE) {
         return NULL;
     }
     return convertBoxedPokeSetToParty(battleBox, HEAPID_UNION);
@@ -853,7 +853,7 @@ static void UnionOneself_FreeBoxParty(PokeParty *party) {
 }
 
 static void UnionOneself_SetRegulation(UnionSystem *unisys, u32 activity) {
-    func_0201f744(UnionOneself_GetRegulationFile(activity), unisys->alloc.regulation);
+    PokeRegulation_Load(UnionOneself_GetRegulationFile(activity), unisys->alloc.regulation);
     if (UnionOneself_IsDoubleActivity(activity) == TRUE) {
         Regulation_SetParam(unisys->alloc.regulation, 13, 1);
     } else {
@@ -863,7 +863,7 @@ static void UnionOneself_SetRegulation(UnionSystem *unisys, u32 activity) {
 
 static u32 UnionOneself_CheckPartyRegulation(UnionSystem *unisys, u32 *result) {
     *result = 0;
-    return func_0201f424(unisys->alloc.regulation, GameData_GetParty(unisys->param->gameData), result);
+    return PokeRegulation_CheckParty(unisys->alloc.regulation, GameData_GetParty(unisys->param->gameData), result);
 }
 
 static u32 UnionOneself_CheckBoxRegulation(UnionSystem *unisys, u32 *result) {
@@ -872,7 +872,7 @@ static u32 UnionOneself_CheckBoxRegulation(UnionSystem *unisys, u32 *result) {
 
     *result = 0;
     if (party != NULL) {
-        ret = func_0201f424(unisys->alloc.regulation, party, result);
+        ret = PokeRegulation_CheckParty(unisys->alloc.regulation, party, result);
         UnionOneself_FreeBoxParty(party);
     } else {
         *result = -1;
@@ -2114,7 +2114,7 @@ static BOOL UnionOneself_StepTradeRun(UnionSystem *unisys, UnionSelf *situ, Fiel
             GameData *gameData = GSYS_GetGameData(unisys->param->gsys);
             RivalDataSave *rival = getHollow_RivalData(GameData_GetSaveControl(gameData));
 
-            func_0200f700(rival, getIDAsUInt(func_02017378(gameData, func_02042a6c(func_02040440()) ^ 1)));
+            Misc_AddMetTrainer(rival, getIDAsUInt(func_02017378(gameData, func_02042a6c(func_02040440()) ^ 1)));
             (*seq)++;
         }
         break;
@@ -2686,7 +2686,7 @@ static BOOL UnionOneself_StepColosseumSendRun(UnionSystem *unisys, UnionSelf *si
 
         for (i = 0; i < count; i++) {
             if (clsys->members[i].unk26 == 1 && i != func_02042a6c(func_02040440())) {
-                func_0200f700(rival, getIDAsUInt(&clsys->members[i].info));
+                Misc_AddMetTrainer(rival, getIDAsUInt(&clsys->members[i].info));
             }
         }
         func_ov028_021729a0(clsys, TRUE);
@@ -2863,7 +2863,7 @@ static BOOL UnionOneself_StepPartySelectRun(UnionSystem *unisys, UnionSelf *situ
         (*seq)++;
         // fallthrough
     case 1:
-        if (func_0200c340(getBattleBox(GameData_GetSaveControl(unisys->param->gameData))) == TRUE) {
+        if (BattleBoxSave_HasPkm(getBattleBox(GameData_GetSaveControl(unisys->param->gameData))) == TRUE) {
             (*seq)++;
         } else {
             clsys->unk17C[1] = 0;
@@ -3019,7 +3019,7 @@ static BOOL UnionOneself_StepPartySendRun(UnionSystem *unisys, UnionSelf *situ, 
             break;
         }
         }
-        func_0201f63c(unisys->alloc.regulation, clsys->party[netId]);
+        PokeRegulation_ApplyLevelToParty(unisys->alloc.regulation, clsys->party[netId]);
         (*seq)++;
         break;
     case 1:

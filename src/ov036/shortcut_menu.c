@@ -555,7 +555,7 @@ static void CreateList(ShortcutMenuApp *work, u16 listTop, u16 cursorRow, HeapID
 
     work->options = ListMenuCore_CreateOptionList(count, heapId);
     for (i = 0; i < count; i++) {
-        u32 value = ShortcutSave_GetRegistItem(work->shortcut, i);
+        u32 value = ShortcutSave_GetRegistItem(work->shortcut, (u8)i);
 
         ListMenuCore_AppendMsgOption(work->options, work->msgData, value, value, heapId);
     }

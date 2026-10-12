@@ -702,16 +702,16 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
             StrBuf *name;
 
             str = GFL_StrBufCreate(128, heapId);
-            name = func_0200df68(cp_profile, heapId);
+            name = GdsProfile_CreateNameStrBuf(cp_profile, heapId);
             src = GFL_MsgDataLoadStrbufNew(msg, cp_data->msgID);
-            func_0202437c(wordset, 0, name, func_0200df84(cp_profile), TRUE, 2);
+            func_0202437c(wordset, 0, name, GdsProfile_GetSex(cp_profile), TRUE, 2);
             GFL_WordSetFormatStrbuf(wordset, str, src);
             GFL_StrBufFree(name);
             GFL_StrBufFree(src);
             break;
         }
         case 1: {
-            u32 month = func_0200e0a8(cp_profile);
+            u32 month = GdsProfile_GetBirthMonth(cp_profile);
 
             str = GFL_StrBufCreate(128, heapId);
             src = GFL_MsgDataLoadStrbufNew(msg, cp_data->msgID);
@@ -721,7 +721,7 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
             break;
         }
         case 3: {
-            u32 country = func_0200dfe4(cp_profile);
+            u32 country = GdsProfile_GetCountry(cp_profile);
 
             str = GFL_StrBufCreate(128, heapId);
             src = GFL_MsgDataLoadStrbufNew(msg, cp_data->msgID);
@@ -732,8 +732,8 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
             break;
         }
         case 4: {
-            u32 country = func_0200dfe4(cp_profile);
-            u32 area = func_0200dff8(cp_profile);
+            u32 country = GdsProfile_GetCountry(cp_profile);
+            u32 area = GdsProfile_GetRegion(cp_profile);
 
             str = GFL_StrBufCreate(128, heapId);
             src = GFL_MsgDataLoadStrbufNew(msg, cp_data->msgID);
@@ -746,7 +746,7 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
         case 6: {
             PMSData pms;
 
-            src = func_0200e00c(cp_profile, &pms, heapId);
+            src = GdsProfile_GetIntroduction(cp_profile, &pms, heapId);
             if (src != NULL) {
                 str = GFL_StrBufClone(src, heapId);
                 GFL_StrBufFree(src);
@@ -773,18 +773,18 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
     }
 
     {
-        BOOL egg = func_0200dfd4(cp_profile);
-        u32 species = func_0200df94(cp_profile);
-        u32 form = func_0200dfa4(cp_profile);
-        u32 gender = func_0200dfc4(cp_profile);
+        BOOL egg = GdsProfile_IsEgg(cp_profile);
+        u32 species = GdsProfile_GetSpecies(cp_profile);
+        u32 form = GdsProfile_GetForm(cp_profile);
+        u32 gender = GdsProfile_GetGender(cp_profile);
 
         if (species != 0) {
             HeapID tailHeapId = HEAPID_TAIL(heapId);
             ArcTool *handle = GFL_ArcSysCreateFileHandle(7, tailHeapId);
             ClActorSetup setup;
 
-            p_wk->pokeIconPlt = func_0204bc48(handle, func_02021114(), CLACT_VRAM_MAIN, 0x80, tailHeapId);
-            p_wk->pokeIconCel = func_0204bde0(handle, func_0202111c(), getOBJTileMapping_MainEng(), tailHeapId);
+            p_wk->pokeIconPlt = func_0204bc48(handle, PokeIcon_GetPaletteFile(), CLACT_VRAM_MAIN, 0x80, tailHeapId);
+            p_wk->pokeIconCel = func_0204bde0(handle, PokeIcon_GetCellFile_Main(), getOBJTileMapping_MainEng(), tailHeapId);
             p_wk->pokeIconChr = func_0204b81c(handle, PokeParty_GetIconIndex(species, form, gender, egg), FALSE,
                                               CLACT_VRAM_MAIN, tailHeapId);
             GFL_ArcToolFree(handle);
@@ -795,7 +795,7 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
             setup.sequence = 1;
             p_wk->pokeIcon = func_0204c040(unit, p_wk->pokeIconChr, p_wk->pokeIconPlt, p_wk->pokeIconCel, &setup,
                                            CLACT_SURFACE_MAIN, heapId);
-            func_0204c378(p_wk->pokeIcon, func_02021034(species, form, gender, egg), 0);
+            func_0204c378(p_wk->pokeIcon, PokeIcon_GetPalette(species, form, gender, egg), 0);
             func_0204c318(p_wk->pokeIcon, TRUE);
         }
     }
@@ -805,7 +805,7 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
         u32 chr, cel, plt, anm;
         ArcTool *handle;
 
-        if (func_0200df84(cp_profile) == 0) {
+        if (GdsProfile_GetSex(cp_profile) == 0) {
             chr = 20;
             cel = 18;
             plt = 4;
@@ -824,7 +824,7 @@ BrProfile *BrProfile_Init(GdsProfile *cp_profile, BrRes *res, ClActUnit *unit, P
         break;
     }
     case BR_PROFILE_TYPE_UNION: {
-        u32 view = func_0200e0b8(cp_profile);
+        u32 view = GdsProfile_GetUnionView(cp_profile);
         ArcTool *handle = GFL_ArcSysCreateFileHandle(31, HEAPID_TAIL(heapId));
 
         p_wk->trainerPlt = func_0204bbb8(handle, 0, CLACT_VRAM_MAIN, 0x1a0, sc_union_plt[view], 1, heapId);

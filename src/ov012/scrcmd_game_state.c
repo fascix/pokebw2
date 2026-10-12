@@ -446,7 +446,7 @@ BOOL func_ov012_02155d00(VM *vm, FieldScriptEnv *env) {
     BoxSaveAccessor *box = GameData_GetBoxSaveAccessor(FieldScriptEnv_GetGameData(env));
 
     if (flags == 1 || flags == 2) {
-        func_02007d8c(box, flags);
+        BoxSaveAccessor_SetFlags(box, flags);
     }
     return FALSE;
 }
@@ -506,7 +506,7 @@ BOOL s00EA_HOFCheckIntegrity(VM *vm, FieldScriptEnv *env) {
             break;
         case 1:
         case 2:
-            if (func_0200f660(getAddressOfExtraSaveBlk(save, 8, 0)) == 0) {
+            if (HallOfFameSave_GetTeamCount(getAddressOfExtraSaveBlk(save, 8, 0)) == 0) {
                 *result = 0;
             } else {
                 *result = 1;

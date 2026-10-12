@@ -582,7 +582,7 @@ static void GSync_StateFinishDownload(GSyncWork *wk) {
     if (func_02042788() && NHttpRap_SendRequest(GSYNC_REQUEST_DOWNLOAD_FINISH, wk->http)) {
         wk->request[0] = 1;
         wk->request[1] = 0;
-        func_ov189_021a0854(NHttpRap_GetConnection(wk->http), wk->request, sizeof(wk->request));
+        NHTTPSetPostDataRaw(NHttpRap_GetConnection(wk->http), wk->request, sizeof(wk->request));
         if (NHttpRap_StartRequest(wk->http) == 0) {
             GSync_ChangeState(wk, GSync_StateWaitFinishDownload, 743);
         }
@@ -951,7 +951,7 @@ static void GSync_AddForestPokemon(GSyncWork *wk, DreamWorldSave *dreamWorld, in
         int size = 3;
         u8 sanitized = PML_PkmSanitizeForme(species, form);
         u32 sexRatio = PML_PersonalGetParamSingle(species, sanitized, PERSONAL_SEX_RATIO);
-        u8 modelForm = func_0201efe4(species, sanitized);
+        u8 modelForm = PML_PkmGetSpriteForme(species, sanitized);
 
         switch (sexRatio) {
         case 0:
@@ -1278,7 +1278,7 @@ static void GSync_StateCreate(GSyncWork *wk) {
     if (func_02042788()) {
         if (NHttpRap_SendRequest(GSYNC_REQUEST_CREATE, wk->http)) {
             data = func_02007454(wk->save, &size);
-            func_ov189_021a0854(NHttpRap_GetConnection(wk->http), data, 0x80000);
+            NHTTPSetPostDataRaw(NHttpRap_GetConnection(wk->http), data, 0x80000);
             GSyncDisp_CreateActor(wk->disp, 13);
             if (NHttpRap_StartRequest(wk->http) == 0) {
                 GSync_ChangeState(wk, GSync_StateWaitCreate, 1841);
@@ -1594,7 +1594,7 @@ static void GSync_StateUpload(GSyncWork *wk) {
             if (NHttpRap_SendRequest(GSYNC_REQUEST_UPLOAD, wk->http)) {
                 void *data = func_02007454(wk->save, &size);
 
-                func_ov189_021a0854(NHttpRap_GetConnection(wk->http), data, 0x80000);
+                NHTTPSetPostDataRaw(NHttpRap_GetConnection(wk->http), data, 0x80000);
                 GSyncDisp_SetProgress(wk->disp, 0);
                 wk->progress = 0;
                 if (NHttpRap_StartRequest(wk->http) == 0) {
