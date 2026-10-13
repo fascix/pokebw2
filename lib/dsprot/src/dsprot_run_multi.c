@@ -24,13 +24,15 @@ static inline void *DSProt_CheckFailed(DSProtCheckArgs *args, void *arg0, void *
 // that is added up
 void *DSProt_RunChecks1(void *arg0, void *arg1) {
     DSProtCheckArgs args;
+    DSProtCheckArgs *argsPtr = &args;
     u32 checks[32];
     u32 *check;
     u32 total;
-    u32 index = data_ov337_02182440;
+    u32 index = *(u32 *)((u8 *)&data_ov337_02182440 - 0x2200);
+    DSProtCallback *table = (DSProtCallback *)((u8 *)&data_ov337_02182444 - 0x2200);
 
-    args.nop = data_ov337_02182444[index];
-    args.tamper = data_ov337_02182444[index ^ 1];
+    args.nop = table[index];
+    args.tamper = table[index ^ 1];
     args.arg0 = arg0;
     args.arg1 = arg1;
     args.result = NULL;
@@ -52,11 +54,11 @@ void *DSProt_RunChecks1(void *arg0, void *arg1) {
             code++;
         }
         if (checksum != DSPROT_CHECKSUM) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
-        value = func(&args);
+        value = func(argsPtr);
         if (value == 0 && args.failed == 0) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
         total += value;
         check++;
@@ -74,13 +76,15 @@ void *DSProt_RunChecks1(void *arg0, void *arg1) {
 // that is added up
 void *DSProt_RunChecks2(void *arg0, void *arg1) {
     DSProtCheckArgs args;
+    DSProtCheckArgs *argsPtr = &args;
     u32 checks[32];
     u32 *check;
     u32 total;
-    u32 index = data_ov337_02182440;
+    u32 index = *(u32 *)((u8 *)&data_ov337_02182440 - 0x2200);
+    DSProtCallback *table = (DSProtCallback *)((u8 *)&data_ov337_02182444 - 0x2200);
 
-    args.nop = data_ov337_02182444[index];
-    args.tamper = data_ov337_02182444[index ^ 1];
+    args.nop = table[index];
+    args.tamper = table[index ^ 1];
     args.arg0 = arg0;
     args.arg1 = arg1;
     args.result = NULL;
@@ -102,11 +106,11 @@ void *DSProt_RunChecks2(void *arg0, void *arg1) {
             code++;
         }
         if (checksum != DSPROT_CHECKSUM) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
-        value = func(&args);
+        value = func(argsPtr);
         if (value == 0 && args.failed == 0) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
         total += value;
         check++;
@@ -124,13 +128,15 @@ void *DSProt_RunChecks2(void *arg0, void *arg1) {
 // that is added up
 void *DSProt_RunChecks3(void *arg0, void *arg1) {
     DSProtCheckArgs args;
+    DSProtCheckArgs *argsPtr = &args;
     u32 checks[32];
     u32 *check;
     u32 total;
-    u32 index = data_ov337_02182440;
+    u32 index = *(u32 *)((u8 *)&data_ov337_02182440 - 0x2200);
+    DSProtCallback *table = (DSProtCallback *)((u8 *)&data_ov337_02182444 - 0x2200);
 
-    args.nop = data_ov337_02182444[index];
-    args.tamper = data_ov337_02182444[index ^ 1];
+    args.nop = table[index];
+    args.tamper = table[index ^ 1];
     args.arg0 = arg0;
     args.arg1 = arg1;
     args.result = NULL;
@@ -152,11 +158,11 @@ void *DSProt_RunChecks3(void *arg0, void *arg1) {
             code++;
         }
         if (checksum != DSPROT_CHECKSUM) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
-        value = func(&args);
+        value = func(argsPtr);
         if (value == 0 && args.failed == 0) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
         total += value;
         check++;
@@ -174,13 +180,15 @@ void *DSProt_RunChecks3(void *arg0, void *arg1) {
 // that is added up
 void *DSProt_RunChecks4(void *arg0, void *arg1) {
     DSProtCheckArgs args;
+    DSProtCheckArgs *argsPtr = &args;
     u32 checks[32];
     u32 *check;
     u32 total;
-    u32 index = data_ov337_02182440;
+    u32 index = *(u32 *)((u8 *)&data_ov337_02182440 - 0x2200);
+    DSProtCallback *table = (DSProtCallback *)((u8 *)&data_ov337_02182444 - 0x2200);
 
-    args.nop = data_ov337_02182444[index];
-    args.tamper = data_ov337_02182444[index ^ 1];
+    args.nop = table[index];
+    args.tamper = table[index ^ 1];
     args.arg0 = arg0;
     args.arg1 = arg1;
     args.result = NULL;
@@ -202,11 +210,11 @@ void *DSProt_RunChecks4(void *arg0, void *arg1) {
             code++;
         }
         if (checksum != DSPROT_CHECKSUM) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
-        value = func(&args);
+        value = func(argsPtr);
         if (value == 0 && args.failed == 0) {
-            return DSProt_CheckFailed(&args, arg0, arg1);
+            return DSProt_CheckFailed(argsPtr, arg0, arg1);
         }
         total += value;
         check++;
